@@ -22,17 +22,19 @@ module.exports = {
       'pages': resolve('src/pages'),
       'components': resolve('src/components')
     }
-
   },
+  cache: true,
   devServer: {
-    hot: true,
     compress: true,
-    open: true
+    open: true,
+    client: {
+      progress: true,
+    },
   },
   optimization: {
     minimize: true,
-    splitChunks:{
-      chunks:'all'
+    splitChunks: {
+      chunks: 'all'
     },
     minimizer: [
       '...',
@@ -50,6 +52,10 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.vue$/,
+        use: 'vue-loader'
+      },
+      {
         test: /\.s?css$/,
         use: [
           MiniCssExtractPlugin.loader,
@@ -57,19 +63,24 @@ module.exports = {
           'sass-loader'
         ]
       }, {
-        test: /\.vue$/,
-        use: 'vue-loader'
-      }, {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
+        loader: 'babel-loader'
+      },
+      {
+        test: /\.(png|gif|jpe?g)$/,
+        loader: "url-loader",
+        options: {
+          limit: 8 * 1024,
+          outputPath: 'imgs/',
+          name: '[name][hash:8].[ext]',//图片文件的命名
+          esModule: false
         }
       }
+
     ]
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: resolve('public/index.html'),
