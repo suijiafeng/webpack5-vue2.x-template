@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
 const TerserPlugin = require('terser-webpack-plugin');
-const resolve = (path) => path.resolve(__dirname, path)
+const resolve = (dir) => path.resolve(__dirname, dir)
 module.exports = {
   entry: {
     app: resolve('src/main.js')
@@ -31,6 +31,9 @@ module.exports = {
   },
   optimization: {
     minimize: true,
+    splitChunks:{
+      chunks:'all'
+    },
     minimizer: [
       '...',
       new TerserPlugin({
@@ -69,7 +72,7 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: resolve(__dirname, 'public/index.html'),
+      template: resolve('public/index.html'),
       inject: true
     }),
     new VueLoaderPlugin(),
