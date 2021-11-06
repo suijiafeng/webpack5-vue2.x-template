@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import WelcomeMessage from 'components/Home/WelcomeMessage'
+import WelcomeMessage from 'components/WelcomeMessage'
 
 export default {
   components: {
