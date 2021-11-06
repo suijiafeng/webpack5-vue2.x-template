@@ -3,8 +3,18 @@ import Router from 'vue-router'
 
 const routes = [
   {
+    path: '/',
+    component: () => import('pages/Home')
+  },
+  {
+    path: '/user',
+    name: 'user',
+    component: () => import('pages/user')
+  },
+
+  {
     path: '*',
-    component: ()=>import('pages/Home')
+    component: () => import('pages/404')
   }
 ]
 
