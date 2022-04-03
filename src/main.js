@@ -1,10 +1,12 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-
-import './style2.scss'
+import store from './store'
+import './style'
+import './components'
 
 new Vue({
   router,
+  store,
   render: h => h(App)
 }).$mount('#app')

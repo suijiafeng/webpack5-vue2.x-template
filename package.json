@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack server --mode development",
-    "build": "webpack --mode production",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "webpack server --config  build/webpack.dev.conf",
+    "build": "webpack --config  build/webpack.prod.conf",
+    "analyzer": "cross-env analyzer=true webpack  --config  build/webpack.prod.conf",
+    "test":"npx http-server ./dist -p 3001"
   },
   "keywords": [],
   "author": "",
@@ -15,20 +16,30 @@
     "@babel/core": "^7.15.0",
     "@babel/preset-env": "^7.15.0",
     "babel-loader": "^8.2.3",
+    "babel-plugin-component": "^1.1.1",
+    "cross-env": "^7.0.3",
     "css-loader": "^6.5.1",
+    "file-loader": "^6.2.0",
+    "happypack": "^5.0.1",
     "html-webpack-plugin": "^5.5.0",
     "mini-css-extract-plugin": "^2.4.4",
+    "mockjs": "^1.1.0",
     "sass": "^1.43.4",
     "sass-loader": "^12.3.0",
     "terser-webpack-plugin": "^5.2.4",
+    "url-loader": "^4.1.1",
     "vue-loader": "^15.9.8",
     "vue-template-compiler": "^2.6.14",
     "webpack": "^5.62.1",
-    "webpack-cli": "^4.9.1",
-    "webpack-dev-server": "^4.4.0"
+    "webpack-bundle-analyzer": "^4.5.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.4.0",
+    "webpack-merge": "^5.8.0"
   },
   "dependencies": {
+    "element-ui": "^2.15.7",
     "vue": "^2.6.14",
-    "vue-router": "^3.5.3"
+    "vue-router": "^3.5.3",
+    "vuex": "^3.6.2"
   }
 }
