@@ -7,7 +7,7 @@
     "dev": "webpack server --config  build/webpack.dev.conf",
     "build": "webpack --config  build/webpack.prod.conf",
     "analyzer": "cross-env analyzer=true webpack  --config  build/webpack.prod.conf",
-    "test":"npx http-server ./dist -p 3001"
+    "test": "npx http-server ./dist -p 3001"
   },
   "keywords": [],
   "author": "",
@@ -33,7 +33,7 @@
     "webpack": "^5.62.1",
     "webpack-bundle-analyzer": "^4.5.0",
     "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^4.4.0",
+    "webpack-dev-server": "^4.9.1",
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {

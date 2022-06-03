@@ -1,12 +1,17 @@
 <template>
-  <div class="container center-content">
-    <router-view/>
+  <div>
+    <!-- <layout/> -->
+    <router-view />
   </div>
 </template>
+<script>
+import layout from "components/layout";
+export default {
+  components: {
+    layout,
+  },
+};
+</script>
+<style lang="scss">
 
-<style lang="scss" scoped>
-.container {
-  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
-  max-width: 1200px;
-}
 </style>

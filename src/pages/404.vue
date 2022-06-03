@@ -1,13 +1,13 @@
 <template>
-  <h1>404</h1>
+  <div>
+    <h1>404</h1>
+    <img src="~@/assets/404.png" alt="" />
+  </div>
 </template>
 
 <script>
-export default {
-
-}
+export default {};
 </script>
 
 <style>
-
 </style>
