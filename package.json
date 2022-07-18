@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "npm run dev",
     "dev": "webpack server --config  build/webpack.dev.conf",
     "build": "webpack --config  build/webpack.prod.conf",
     "analyzer": "cross-env analyzer=true webpack  --config  build/webpack.prod.conf",

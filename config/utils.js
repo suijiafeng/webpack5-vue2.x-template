@@ -1,5 +1,5 @@
 module.exports = {
-  title:'123456',
+  title:'webpack5-vue2.x-template',
   publicPath:'/'
   
 }

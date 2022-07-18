@@ -33,13 +33,23 @@ module.exports = {
         loader: 'babel-loader'
       },
       {
-        test: /\.(png|gif|svg|jpe?g)$/,
-        exclude: /node_modules/,
+        test: /\.(png|gif|svg|jpe?g|webp)$/,
         type: 'asset',
         parser: {
           dataUrlCondition: {
-            maxSize: 8 * 1024 // 4kb
+            // 小于50kb图片转成base64
+            maxSize: 50 * 1024 
           }
+        },
+        generator: {
+          filename: 'assets/images/[hash:8][ext][query]'
+        }
+      },
+      {
+        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'assets/font/[hash:8][ext][query]'
         }
       }
     ]
