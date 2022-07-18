@@ -1,11 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-const config = require('../../config/utils')
 
 const routes = [
   {
     path: '/',
-    redirect:'/home'
+    redirect: '/home'
   },
   {
     path: '/user',

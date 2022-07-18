@@ -1,5 +1,6 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const ESLintPlugin = require('eslint-webpack-plugin');
 const { VueLoaderPlugin } = require('vue-loader')
 const utils = require('../config/utils')
 const resolve = (dir) => path.resolve(__dirname, '../', dir)
@@ -61,6 +62,7 @@ module.exports = {
       template: resolve('public/index.html'),
       inject: true
     }),
-    new VueLoaderPlugin()
+    new VueLoaderPlugin(),
+    new ESLintPlugin({fix:true})
   ]
 }
