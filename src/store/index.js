@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 const state = {
-  test: 'testValue'
+  test: ''
 
 }
 const mutations = {

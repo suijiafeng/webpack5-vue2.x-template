@@ -7,7 +7,14 @@ const webpackConfig = merge(webpackBaseConf, {
   devServer: {
     compress: true,
     open: true,
-    hot: true
+    hot: true,
+    client: {
+      progress:true,
+      overlay: {
+        errors: true,
+        warnings: false
+      }
+    }
   },
   module: {
     rules: [
@@ -16,7 +23,8 @@ const webpackConfig = merge(webpackBaseConf, {
         use: [
           'vue-style-loader',
           'css-loader',
-          'sass-loader'
+          'sass-loader',
+          'postcss-loader'
         ]
       }
     ]

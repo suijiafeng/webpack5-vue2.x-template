@@ -1,7 +1,9 @@
 const webpackBaseConf = require('./webpack.base.conf');
 const { merge } = require('webpack-merge');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
+const CopyPlugin = require("copy-webpack-plugin");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const isAnalyzer = process.env?.analyzer
 const webpackConfig = merge(webpackBaseConf, {
@@ -23,7 +25,11 @@ const webpackConfig = merge(webpackBaseConf, {
             drop_console: true
           }
         }
-      })
+      }),
+      new CssMinimizerPlugin({
+        exclude: /\/includes/,
+        minify: CssMinimizerPlugin.cssoMinify
+      }),
     ]
   },
   module: {
@@ -33,13 +39,21 @@ const webpackConfig = merge(webpackBaseConf, {
         use: [
           MiniCssExtractPlugin.loader,
           'css-loader',
-          'sass-loader'
+          'sass-loader',
+          'postcss-loader'
         ]
       }
     ]
   },
   plugins: [
-    new MiniCssExtractPlugin({ filename: 'css/[name].[contenthash].css' })
+    new MiniCssExtractPlugin({ filename: 'css/[name].[contenthash].css' }),
+    new CopyPlugin({
+      patterns: [{
+        from: "public", globOptions: { dot: true, gitignore: true, ignore: ["**/index.html"] },
+      }
+      ],
+    }
+    )
   ]
 })
 isAnalyzer && webpackConfig.plugins.push(new BundleAnalyzerPlugin())

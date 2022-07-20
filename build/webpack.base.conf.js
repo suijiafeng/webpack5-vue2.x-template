@@ -63,6 +63,6 @@ module.exports = {
       inject: true
     }),
     new VueLoaderPlugin(),
-    new ESLintPlugin({fix:true})
+    new ESLintPlugin({fix:true,context:resolve('src')})
   ]
 }

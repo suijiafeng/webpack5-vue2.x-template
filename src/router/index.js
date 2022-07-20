@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-const routes = [
+export const routes = [
   {
     path: '/',
     redirect: '/home'

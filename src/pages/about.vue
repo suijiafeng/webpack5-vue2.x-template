@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <h1>about</h1>
-    <input type="text" :value="value" @change="handleChange">
+<div>
+  <h1>about page</h1>
+  data from vuex：{{ $store.state.test }}
   </div>
 </template>
 
