@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <h1>Dashboard</h1>
+    <h1>Dashboard1111</h1>
     <el-row :gutter="20">
       <el-col :span="6" v-for="(item, index) in stats" :key="index">
         <el-card class="box-card">
