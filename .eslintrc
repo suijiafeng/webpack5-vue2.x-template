@@ -1,16 +1,19 @@
 {
   "root": true,
   "parserOptions": {
-    "parser": "babel-eslint",
-    "ecmaVersion": 2021,
+    "parser": "@babel/eslint-parser",
+    "requireConfigFile": false,
+    "ecmaVersion": 2018,
     "sourceType": "module"
   },
+  
   "env": {
-    "browser": true,
-    "node": true,
-    "es6": true
+    "node": true
   },
-  "extends": ["eslint:recommended"],
+  "extends": [
+    "plugin:vue/essential",
+    "eslint:recommended"
+  ],
   "rules": {
     "eqeqeq": ["warn", "always", {
       "null": "ignore"
@@ -19,6 +22,15 @@
     "no-undef": "warn",
     "no-var": "warn",
     "comma-dangle": "warn",
+    "vue/multi-word-component-names": "off",
     "no-unused-vars": ["warn"]
-  }
+  },
+  "overrides": [
+    {
+      "files": ["*.vue"],
+      "rules": {
+        "indent": "off"
+      }
+    }
+  ]
 }
