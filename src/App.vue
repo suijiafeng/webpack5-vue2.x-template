@@ -1,53 +1,41 @@
 <template>
-  <div class="full-width center-content">
-    <h1>hello,world</h1>
-    <div class="wrapper">
-    <el-input
-      placeholder="请输入内容"
-      v-model="value"
-      @input="handleInput"
-      clearable
-    />
-    </div>
-    <hr />
-    <ul>
-      <li v-for="(item, index) in routesList" :key="index">
-        <router-link :to="item.path">{{ item.name }}</router-link>
-      </li>
-    </ul>
-    <router-view />
+  <div id="app">
+    <template v-if="!$route.meta.fullScreen">
+      <sidebar></sidebar>
+      <div class="main-container">
+        <navbar></navbar>
+        <app-main></app-main>
+      </div>
+    </template>
+    <template v-else>
+      <router-view></router-view>
+    </template>
   </div>
 </template>
 
 <script>
-import { routes } from "@/router/index";
+import Sidebar from './components/Sidebar.vue'
+import Navbar from './components/Navbar.vue'
+import AppMain from './components/AppMain.vue'
+
 export default {
-  data() {
-    return {
-      value: "",
-    };
-  },
-  computed: {
-    routesList() {
-      return routes.slice(1, -1);
-    },
-  },
-  methods: {
-    handleInput(value) {
-      this.value = value;
-      this.$store.commit("testFn", value);
-    },
-  },
-};
-</script>
-<style lang="scss">
-.wrapper {
-  width: 200px;
+  name: 'App',
+  components: {
+    Sidebar,
+    Navbar,
+    AppMain
+  }
 }
-.center-content {
+</script>
+
+<style>
+#app {
+  font-family: Arial, sans-serif;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+}
+
+.main-container {
+  flex: 1;
+  padding: 20px;
 }
 </style>

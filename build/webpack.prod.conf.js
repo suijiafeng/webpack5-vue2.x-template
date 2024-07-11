@@ -1,60 +1,63 @@
-const webpackBaseConf = require('./webpack.base.conf');
 const { merge } = require('webpack-merge');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const baseWebpackConfig = require('./webpack.base.conf');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-const CopyPlugin = require("copy-webpack-plugin");
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const isAnalyzer = process.env?.analyzer
-const webpackConfig = merge(webpackBaseConf, {
-  mode: 'production',
-  devtool: false,
-  cache: true,
-  target: ['web', 'es5'],
-  optimization: {
-    minimize: true,
-    splitChunks: {
-      chunks: 'all'
-    },
-    minimizer: [
-      '...',
-      new TerserPlugin({
-        terserOptions: {
-          compress: {
-            drop_debugger: true,
-            drop_console: true
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+
+module.exports = (env, argv) => {
+  const baseConfig = baseWebpackConfig(env, argv);
+  const config = merge(baseConfig, {
+    mode: 'production',
+    devtool: false,
+    optimization: {
+      splitChunks: {
+        chunks: 'all',
+        cacheGroups: {
+          libs: {
+            name: 'chunk-libs',
+            test: /[\\/]node_modules[\\/]/,
+            priority: 10,
+            chunks: 'initial'
+          },
+          elementUI: {
+            name: 'chunk-elementUI',
+            priority: 20,
+            test: /[\\/]node_modules[\\/]_?element-ui(.*)/
+          },
+          commons: {
+            name: 'chunk-commons',
+            test: resolve('src/components'),
+            minChunks: 3,
+            priority: 5,
+            reuseExistingChunk: true
           }
         }
-      }),
-      new CssMinimizerPlugin({
-        exclude: /\/includes/,
-        minify: CssMinimizerPlugin.cssoMinify
-      }),
+      },
+      runtimeChunk: 'single',
+      minimizer: [
+        new TerserPlugin({
+          terserOptions: {
+            compress: {
+              drop_console: true,
+              drop_debugger: true
+            }
+          }
+        }),
+        new CssMinimizerPlugin()
+      ]
+    },
+    plugins: [
+      new MiniCssExtractPlugin({
+        filename: 'css/[name].[contenthash:8].css',
+        chunkFilename: 'css/[name].[contenthash:8].css'
+      })
     ]
-  },
-  module: {
-    rules: [
-      {
-        test: /\.s?css$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-          'sass-loader',
-          'postcss-loader'
-        ]
-      }
-    ]
-  },
-  plugins: [
-    new MiniCssExtractPlugin({ filename: 'css/[name].[contenthash].css' }),
-    new CopyPlugin({
-      patterns: [{
-        from: "public", globOptions: { dot: true, gitignore: true, ignore: ["**/index.html"] },
-      }
-      ],
-    }
-    )
-  ]
-})
-isAnalyzer && webpackConfig.plugins.push(new BundleAnalyzerPlugin())
-module.exports = webpackConfig
+  });
+
+  if (process.env.analyzer) {
+    config.plugins.push(new BundleAnalyzerPlugin());
+  }
+
+  return config;
+};

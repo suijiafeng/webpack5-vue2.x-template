@@ -1,34 +1,25 @@
-const webpackBaseConf = require('./webpack.base.conf')
 const { merge } = require('webpack-merge');
-const webpack = require("webpack");
-const webpackConfig = merge(webpackBaseConf, {
-  mode: 'development',
-  devtool: 'eval-source-map',
-  devServer: {
-    compress: true,
-    open: true,
-    hot: true,
-    client: {
-      progress:true,
-      overlay: {
-        errors: true,
-        warnings: false
-      }
-    }
-  },
-  module: {
-    rules: [
-      {
-        test: /\.s?css$/,
-        use: [
-          'vue-style-loader',
-          'css-loader',
-          'sass-loader',
-          'postcss-loader'
-        ]
-      }
-    ]
-  }
-})
+const baseWebpackConfig = require('./webpack.base.conf');
 
-module.exports = webpackConfig
+module.exports = (env, argv) => {
+  const baseConfig = baseWebpackConfig(env, argv);
+  return merge(baseConfig, {
+    mode: 'development',
+    devtool: 'eval-cheap-module-source-map',
+    devServer: {
+      historyApiFallback: true,
+      hot: true,
+      open: true,
+      port: 8080,
+      client: {
+        overlay: {
+          errors: true,
+          warnings: false  // 设置为 false 以禁止显示警告
+        },
+      },
+    },
+    optimization: {
+      runtimeChunk: 'single'
+    }
+  });
+};
