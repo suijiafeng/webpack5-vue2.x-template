@@ -4,11 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm run dev",
-    "dev": "webpack server --config  build/webpack.dev.conf",
-    "build": "webpack --config  build/webpack.prod.conf",
-    "analyzer": "cross-env analyzer=true webpack  --config  build/webpack.prod.conf",
-    "test": "npx http-server ./dist -p 3001"
+"start": "npm run dev",
+    "dev": "webpack serve --mode development --config build/webpack.dev.conf.js",
+    "build": "webpack --mode production --config build/webpack.prod.conf.js",
+    "build:dev": "webpack --mode development --config build/webpack.prod.conf.js",
+    "build:stage": "webpack --mode production --env stage --config build/webpack.prod.conf.js",
+    "analyzer": "cross-env analyzer=true webpack --mode production --config build/webpack.prod.conf.js",
+    "test": "npx http-server ./dist -p 3001",
+    "lint": "eslint --ext .js,.vue src",
+    "lint:fix": "eslint --ext .js,.vue src --fix"
   },
   "keywords": [],
   "author": "",

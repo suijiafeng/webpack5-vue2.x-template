@@ -1,17 +1,42 @@
+const fs = require('fs');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { VueLoaderPlugin } = require('vue-loader');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const webpack = require('webpack');
 const dotenv = require('dotenv');
-
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const resolve = (dir) => path.resolve(__dirname, '..', dir);
+
+const loadEnv=(mode)=> {
+  const basePath = path.resolve(process.cwd(), `.env`);
+  const envPath = path.resolve(process.cwd(), `.env.${mode}`);
+  
+  const envFiles = [
+    basePath,
+    envPath,
+    `${basePath}.local`,
+    `${envPath}.local`,
+  ];
+
+  const envVars = {};
+
+  envFiles.forEach(filePath => {
+    if (fs.existsSync(filePath)) {
+      const fileEnv = dotenv.parse(fs.readFileSync(filePath));
+      for (const key in fileEnv) {
+        envVars[key] = process.env[key] || fileEnv[key];
+      }
+    }
+  });
+
+  return envVars;
+}
 
 module.exports = (env, argv) => {
   const isProd = argv.mode === 'production';
-  const envPath = isProd ? '.env.production' : '.env';
-  const envVars = dotenv.config({ path: envPath }).parsed;
-
+  const mode = argv.mode || 'development';
+  const envVars = loadEnv(mode);
   const BASE_URL = envVars.BASE_URL || '/';
 
   return {
@@ -26,7 +51,7 @@ module.exports = (env, argv) => {
       clean: true
     },
     resolve: {
-      extensions: ['.js', '.vue', '.css','.scss','.json'],
+      extensions: ['.js', '.vue', '.css', '.scss', '.json'],
       alias: {
         '@': resolve('src'),
         'vue$': 'vue/dist/vue.esm.js'
@@ -109,9 +134,16 @@ module.exports = (env, argv) => {
           NODE_ENV: argv.mode
         })
       }),
-      new webpack.ProvidePlugin({
-        process: 'process/browser',
+      new MiniCssExtractPlugin({
+        filename: isProd ? 'css/[name].[contenthash:8].css' : 'css/[name].css',
+        chunkFilename: isProd ? 'css/[id].[contenthash:8].css' : 'css/[id].css',
       }),
     ]
   };
 };
+
+// 主要改进：
+// 1. 添加了 MiniCssExtractPlugin 的导入和配置
+// 2. 移除了 webpack.ProvidePlugin，因为 process 已经在 DefinePlugin 中定义
+// 3. 确保 envVars 在 dotenv.config() 失败时有一个默认值
+// 4. 在 CSS 规则中正确使用 MiniCssExtractPlugin.loader

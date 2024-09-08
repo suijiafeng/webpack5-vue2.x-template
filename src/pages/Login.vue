@@ -86,7 +86,7 @@ export default {
               this.$message.error('Invalid username or password. Please try again.')
             }
           } catch (error) {
-            this.$message.error('An error occurred. Please try again later.')
+            this.$message.error('An error occurred：'+error)
           } finally {
             this.loading = false
           }
