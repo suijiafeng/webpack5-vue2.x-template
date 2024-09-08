@@ -1,0 +1,76 @@
+# File: .github/workflows/deploy.yml
+
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'  # 更新到 Node.js 20 LTS 版本
+
+    - name: Get npm cache directory
+      id: npm-cache-dir
+      run: |
+        echo "dir=$(npm config get cache)" >> $GITHUB_OUTPUT
+
+    - uses: actions/cache@v3
+      id: npm-cache
+      with:
+        path: ${{ steps.npm-cache-dir.outputs.dir }}
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: Get yarn cache directory path
+      id: yarn-cache-dir-path
+      run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
+
+    - uses: actions/cache@v3
+      id: yarn-cache
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+
+    - name: Install dependencies
+      run: |
+        if [ -f yarn.lock ]; then
+          yarn install --frozen-lockfile
+        elif [ -f package-lock.json ]; then
+          npm ci
+        else
+          npm i
+        fi
+
+    - name: Build
+      run: |
+        if [ -f yarn.lock ]; then
+          yarn build
+        else
+          npm run build
+        fi
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./dist
+
+# 使用说明:
+# 1. 将此文件保存为 .github/workflows/deploy.yml
+# 2. 确保你的 package.json 中有正确的构建脚本（例如 "build": "vue-cli-service build"）
+# 3. 更新你的 package.json 中的 "engines" 字段以指定所需的 Node.js 版本
+# 4. 如果你使用 Yarn，确保有 yarn.lock 文件；如果使用 npm，确保有 package-lock.json 文件
+# 5. 推送此文件到你的 GitHub 仓库
+# 6. 在仓库的 Settings > Pages 中，将 Source 设置为 "gh-pages" 分支

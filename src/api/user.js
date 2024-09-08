@@ -1,11 +1,23 @@
 // 模拟API调用
 export function login(credentials) {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     setTimeout(() => {
-      resolve({
-        token: 'mock_token_' + Date.now(),
-        user: { id: 1, username: credentials.username }
-      })
+      // 模拟的用户数据库
+      const users = [
+        { username: 'admin', password: 'admin@123' },
+        { username: 'user', password: 'user@123' }
+      ]
+
+      const user = users.find(u => u.username === credentials.username && u.password === credentials.password)
+
+      if (user) {
+        resolve({
+          token: 'mock_token_' + Date.now(),
+          user: { id: user.username === 'admin' ? 1 : 2, username: user.username }
+        })
+      } else {
+        reject(new Error('Invalid username or password'))
+      }
     }, 1000)
   })
 }

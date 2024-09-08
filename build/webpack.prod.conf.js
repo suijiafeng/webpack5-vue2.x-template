@@ -1,10 +1,11 @@
 const { merge } = require('webpack-merge');
+const path = require('path')
 const baseWebpackConfig = require('./webpack.base.conf');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-
+const resolve = (dir) => path.resolve(__dirname, '../', dir)
 module.exports = (env, argv) => {
   const baseConfig = baseWebpackConfig(env, argv);
   const config = merge(baseConfig, {

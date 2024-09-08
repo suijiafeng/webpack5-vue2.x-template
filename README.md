@@ -30,8 +30,8 @@
 1. 克隆仓库：
 
    ```
-   git clone https://github.com/your-username/your-project-name.git
-   cd your-project-name
+   git clone https://github.com/suijiafeng/webpack5-vue2.x-template.git
+   cd webpack5-vue2.x-template
    ```
 
 2. 安装依赖：
